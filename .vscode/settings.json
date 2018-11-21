@@ -1,0 +1,9 @@
+{
+    "files.associations": {
+        "allegro.h": "c",
+        "chrono": "cpp",
+        "atomic": "cpp",
+        "thread": "cpp",
+        "tuple": "cpp"
+    }
+}
