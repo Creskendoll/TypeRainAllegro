@@ -23,13 +23,16 @@ class Words
         ~Words(); // deconstructor
         void spawnRandomWords(int count); /* To get the words which will be seen on the screen */
         void eraseWord(Word* word);
+        void addWord(Word* word);
         void updateWords(unsigned int update_time);
+        void removeNLetters(Word* word, int count);
         std::atomic<bool> updateStop {false};
         Word* isIn(string s);
         Word* lettersAreIn(string s);
-        vector<Word*> words_on_screen;
+        vector<Word*> getWordsOnScreen();
 
     private:
+        vector<Word*> words_on_screen;
         int screen_height,screen_width;
         vector<string> all_words;
         vector<Word*> erase_words;

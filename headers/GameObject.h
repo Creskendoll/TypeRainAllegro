@@ -9,9 +9,9 @@ class GameObject
     protected:
         Point position;
         Vector heading;
-        int speed;
 
     public:
+        int speed;
         bool is_point_in_rectangle(BoundingBox r, Point p) {
             return  (r.x1 <= p.x && r.x2 >= p.x) 
                                 &&

@@ -8,7 +8,7 @@
 Projectiles::Projectiles(Words* _words)
 {
     words = _words;
-    updateProjectilesTask = thread(&Projectiles::updateProjectiles, this, 20);
+    updateProjectilesTask = thread(&Projectiles::updateProjectiles, this, 30);
 }
 
 vector<Projectile*> Projectiles::getProjectiles() {
@@ -42,9 +42,10 @@ void Projectiles::updateProjectiles(unsigned int update_time) {
             // Make projectiles bounce
 
             // Remove if target collided
-            for (Word* w : words->words_on_screen) {
+            for (Word* w : words->getWordsOnScreen()) {
                 if (p->checkCollision(w)) {
                     removeProjectile(p);
+                    words->removeNLetters(w, 1);
                 }
             }
         }

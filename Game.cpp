@@ -19,7 +19,7 @@ Game::Game(ALLEGRO_DISPLAY* d, ALLEGRO_EVENT_QUEUE* q) {
 	vector<string> opt = {"Resume", "Quit"};
 	inGameMenu = new Menu(display, queue, opt);
 
-	words_helper = new Words("words.txt", screen_height, screen_width);
+	words_helper = new Words("src/words.txt", screen_height, screen_width);
 	wordFont = al_load_ttf_font("fonts/ll_pixel.ttf", 20, 0);
 	inputFont = al_load_ttf_font("fonts/hemi_head.ttf", 20, 0);
 
@@ -53,7 +53,7 @@ void Game::moveWords(int moveBy, int axis) {
 	switch (axis)
 	{
 		case HORIZONTAL:
-			for(Word* w : words_helper->words_on_screen) {
+			for(Word* w : words_helper->getWordsOnScreen()) {
 				// write the word to the given position
 				w->setX(w->getX() + moveBy);
 				// anchor the word to the leftmost of screen
@@ -66,7 +66,7 @@ void Game::moveWords(int moveBy, int axis) {
 			break;
 	
 		case VERTICAL:
-			for(Word* w : words_helper->words_on_screen) {
+			for(Word* w : words_helper->getWordsOnScreen()) {
 				// write the word to the given position
 				w->setY(w->getY()+moveBy);
 
@@ -191,16 +191,14 @@ void Game::start() {
 				al_draw_filled_circle(p->getX(), p->getY(), p->size, p->color);
 			}
 
-			lock.lock();
 			/* Draw words */
-			for(Word* w : words_helper->words_on_screen)
+			for(Word* w : words_helper->getWordsOnScreen())
 			{
 				al_draw_text(wordFont, w->color, w->getX(), w->getY(),
 					ALLEGRO_ALIGN_CENTER, w->data.c_str());
 				// bounding box of word
 				al_draw_rectangle(w->boundingBox.x1, w->boundingBox.y1, w->boundingBox.x2, w->boundingBox.y2, w->color, 3);
 			}
-			lock.unlock();
 
 			/* Draw user area */
 			al_draw_filled_rectangle(0, screen_height-playerAreaHeight, screen_width, screen_height, al_map_rgb(0,0,0));

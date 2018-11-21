@@ -32,6 +32,25 @@ void Words::eraseWord(Word* word) {
     words_on_screen.erase(std::remove(words_on_screen.begin(), words_on_screen.end(), word), words_on_screen.end());
     mtx.unlock();
 }
+void Words::addWord(Word* word) {
+    mtx.lock();
+    words_on_screen.push_back(word);
+    mtx.unlock();
+}
+void Words::removeNLetters(Word* w, int count) {
+    string newData = w->data.substr(count, w->data.size()-1);
+    if (newData.empty()) {
+        eraseWord(w);
+    }else{
+        eraseWord(w);
+        Word* newWord = new Word(newData, w->getX(), w->getY(), w->speed, w->color);
+        addWord(newWord);
+    }
+}
+
+vector<Word*> Words::getWordsOnScreen() {
+    return words_on_screen;
+}
 
 void Words::updateWords(unsigned int update_time) {
 	while(true) {
@@ -79,9 +98,7 @@ void Words::spawnRandomWords(int count) {
             }
         }
         
-        mtx.lock();
-        words_on_screen.push_back(newWord);
-        mtx.unlock();
+        addWord(newWord);
     }
 }
 
