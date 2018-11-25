@@ -44,10 +44,27 @@ void Projectiles::updateProjectiles(unsigned int update_time) {
             // Remove if target collided
             for (Word* w : words->getWordsOnScreen()) {
                 if (p->checkCollision(w)) {
-                    removeProjectile(p);
                     // remove letters from word on screen
                     words->removeNLetters(w, 1);
                     string inputStr = words->getInputWord();
+
+                    if (p->getY() > words->screen_height || p->getY() < 0 || p->getX() > words->screen_width || p->getX() < 0) {
+                        removeProjectile(p);
+                    } else if (p->type == PROJECTILE_BOUNCE) {
+                        Vector normal = w->heading;
+                        p->setY(p->getY() + normal.direction.y*5);
+                        double dotProd = p->heading.direction.x * normal.direction.x
+                                        + p->heading.direction.y * normal.direction.y;
+                        
+                        Vector reflected;
+                        reflected.direction.x = p->heading.direction.x - 2*dotProd*normal.direction.x;
+                        reflected.direction.y = p->heading.direction.y - 2*dotProd*normal.direction.y;
+
+                        p->heading = reflected;
+                    } else {
+                        removeProjectile(p);
+                    }
+
                     //check if collided word is the target word
                     if (p->targetWord == w) {
                         if (inputStr.length() > 1) {

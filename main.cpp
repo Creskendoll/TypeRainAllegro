@@ -36,7 +36,7 @@ int main(void) {
 
     /* Create our window. */
     al_set_new_display_flags(ALLEGRO_RESIZABLE);
-    display = al_create_display(640, 480);
+    display = al_create_display(720, 720);
     if (!display) {
 		fprintf(stderr, "Failed to create display.\n");
         return 1;

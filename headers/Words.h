@@ -32,10 +32,10 @@ class Words
         vector<Word*> getWordsOnScreen();
         string getInputWord();
         void setInputWord(string s);
+        int screen_height,screen_width;
 
     private:
         vector<Word*> words_on_screen;
-        int screen_height,screen_width;
         vector<string> all_words;
         vector<Word*> erase_words;
         thread updateWordsTask;

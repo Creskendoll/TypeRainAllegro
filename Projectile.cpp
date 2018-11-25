@@ -12,10 +12,10 @@ Projectile::Projectile(double _x, double _y, int _size, int _speed, Word* _targe
 
     heading.origin = position;
     double distX = targetWord->getX() - _x;
-    double distY = _y - targetWord->getY();
+    double distY = targetWord->getY() - _y;
     distance_to_target = sqrt(distX*distX + distY*distY);
-    heading.direction.x = distX;  
-    heading.direction.y = distY;
+    heading.direction.x = distX / distance_to_target;  
+    heading.direction.y = distY / distance_to_target;
 }
 void Projectile::setPosition(double _x, double _y) {
     position.x = _x;
@@ -28,15 +28,8 @@ void Projectile::setPosition(double _x, double _y) {
 }
 
 void Projectile::move(){
-    double distX = targetWord->getX() - position.x;
-    double distY = targetWord->getY() - position.y;
-    distance_to_target = sqrt(distX*distX + distY*distY);
-    
-    heading.direction.x = distX;  
-    heading.direction.y = distY;
-
-    setPosition(position.x + (heading.direction.x/distance_to_target)*speed,
-        position.y + (heading.direction.y/distance_to_target)*speed);
+    setPosition(position.x + heading.direction.x*speed,
+        position.y + heading.direction.y*speed);
 }
 
 Projectile::~Projectile(){

@@ -81,8 +81,8 @@ void Words::spawnRandomWords(int count) {
         int randomIndex = rand() % this->all_words.size();
         string word = this->all_words.at(randomIndex);
         int word_y, word_x;
-        word_y = -(rand() % screen_height) * 2;
         word_x = (rand() % (screen_width-word.size()*20)) + word.size()*10;
+        word_y = -(rand() % screen_height) * 2;
 
         // Random color
         int randR = rand() % 255;

@@ -8,15 +8,11 @@ class GameObject
 {
     protected:
         Point position;
-        Vector heading;
+        bool is_point_in_rectangle(BoundingBox r, Point p);
 
     public:
         int speed;
-        bool is_point_in_rectangle(BoundingBox r, Point p) {
-            return  (r.x1 <= p.x && r.x2 >= p.x) 
-                                &&
-                    (r.y1 <= p.y && r.y2 >= p.y);
-        }
+        Vector heading;
         virtual void setPosition(double _x, double _y) = 0;
         virtual void move() = 0;
         Point getPosition();

@@ -139,10 +139,10 @@ void Game::handleInput(ALLEGRO_EVENT event){
 					}
 					else {
 						inputColor = al_map_rgb(255, 255, 255);
+						Projectile* p = new Projectile(screen_width/2, screen_height-playerAreaHeight, 5, 10,
+								targetWord, targetWord->color);
 						// Launch projectile
-						projectiles->spawnProjectile(
-							new Projectile(screen_width/2, screen_height-playerAreaHeight, 5, 10,
-								targetWord, targetWord->color));
+						projectiles->spawnProjectile(p);
 					}
 				}
 

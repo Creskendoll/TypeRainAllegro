@@ -1,5 +1,11 @@
 #include "headers/GameObject.h"
 
+bool GameObject::is_point_in_rectangle(BoundingBox b_box, Point p) {
+    return  (b_box.x1 <= p.x && b_box.x2 >= p.x) 
+                        &&
+            (b_box.y1 <= p.y && b_box.y2 >= p.y);
+}
+
 bool GameObject::checkCollision(GameObject* gameObject) {
     Point pb1;
     pb1.x = boundingBox.x1; pb1.y = boundingBox.y1;
