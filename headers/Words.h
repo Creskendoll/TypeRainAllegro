@@ -30,6 +30,8 @@ class Words
         Word* isIn(string s);
         Word* lettersAreIn(string s);
         vector<Word*> getWordsOnScreen();
+        string getInputWord();
+        void setInputWord(string s);
 
     private:
         vector<Word*> words_on_screen;
@@ -37,6 +39,7 @@ class Words
         vector<string> all_words;
         vector<Word*> erase_words;
         thread updateWordsTask;
+        string inputWord = "";
         mutex mtx; 
 };
 

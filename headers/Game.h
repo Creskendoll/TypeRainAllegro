@@ -39,7 +39,6 @@ class Game
 		int difficulty = 1;
 		void moveWords(int moveBy, int axis);
 		void handleInput(ALLEGRO_EVENT event);
-        string input = "";
 		std::mutex lock;
 		Projectiles* projectiles;
 };

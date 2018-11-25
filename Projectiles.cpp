@@ -45,7 +45,17 @@ void Projectiles::updateProjectiles(unsigned int update_time) {
             for (Word* w : words->getWordsOnScreen()) {
                 if (p->checkCollision(w)) {
                     removeProjectile(p);
+                    // remove letters from word on screen
                     words->removeNLetters(w, 1);
+                    string inputStr = words->getInputWord();
+                    //check if collided word is the target word
+                    if (p->targetWord == w) {
+                        if (inputStr.length() > 1) {
+                            words->setInputWord(inputStr.substr(1, inputStr.length()));
+                        } else {
+                            words->setInputWord("");
+                        }
+                    }
                 }
             }
         }

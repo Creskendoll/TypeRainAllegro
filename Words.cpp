@@ -2,6 +2,9 @@
 #include "headers/Words.h"
 #include "headers/Helper.h"
 
+// TODO: game modes
+// incremental difficulty
+
 // Initialize all_words and fill it with all the words in the read file 
 Words::Words(string file, int h, int w)
 {
@@ -41,10 +44,9 @@ void Words::removeNLetters(Word* w, int count) {
     string newData = w->data.substr(count, w->data.size()-1);
     if (newData.empty()) {
         eraseWord(w);
+        spawnRandomWords(1);
     }else{
-        eraseWord(w);
-        Word* newWord = new Word(newData, w->getX(), w->getY(), w->speed, w->color);
-        addWord(newWord);
+        w->data = newData;
     }
 }
 
@@ -60,6 +62,10 @@ void Words::updateWords(unsigned int update_time) {
                 if (w->getY() >= screen_height) {
                     eraseWord(w);
                     spawnRandomWords(1);
+                }
+
+                if (inputWord == w->data) {
+                    setInputWord("");
                 }
             }
 			// wait between updates
@@ -122,4 +128,14 @@ Word* Words::lettersAreIn(string s){
         }
     }
     return NULL;
+}
+
+string Words::getInputWord() {
+    return inputWord;
+}
+
+void Words::setInputWord(string s) {
+    mtx.lock();
+    inputWord = s;
+    mtx.unlock();
 }

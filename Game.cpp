@@ -69,19 +69,13 @@ void Game::moveWords(int moveBy, int axis) {
 			for(Word* w : words_helper->getWordsOnScreen()) {
 				// write the word to the given position
 				w->setY(w->getY()+moveBy);
-
-				// remove word if it's out of the screen
-				// last row is for input
-				if (w->getY() >  screen_height-playerAreaHeight) {
-					words_helper->eraseWord(w);
-				}
 			}
 			break;
 	}
 }
 
 void Game::handleInput(ALLEGRO_EVENT event){
-	string currentStr (input);
+	string currentStr (words_helper->getInputWord());
 
 	switch (event.keyboard.keycode)
 	{
@@ -139,7 +133,7 @@ void Game::handleInput(ALLEGRO_EVENT event){
 
 				// Color the input text
 				Word* targetWord = words_helper->lettersAreIn(currentStr);
-				if (targetWord == NULL){
+				if (targetWord == NULL || targetWord->getY() > screen_height){
 					inputColor = al_map_rgb(255, 0, 0);
 				}
 				else {
@@ -155,7 +149,7 @@ void Game::handleInput(ALLEGRO_EVENT event){
 				break;
 			}
 	}
-	input = currentStr;
+	words_helper->setInputWord(currentStr);
 }
 
 void Game::start() {
@@ -204,7 +198,7 @@ void Game::start() {
 			al_draw_filled_rectangle(0, screen_height-playerAreaHeight, screen_width, screen_height, al_map_rgb(0,0,0));
 			// draw input
 			al_draw_text(inputFont, inputColor, 
-				screen_width/24, screen_height-playerAreaHeight+10, ALLEGRO_ALIGN_LEFT, input.c_str());
+				screen_width/24, screen_height-playerAreaHeight+10, ALLEGRO_ALIGN_LEFT, words_helper->getInputWord().c_str());
             
 			al_flip_display();
         }
