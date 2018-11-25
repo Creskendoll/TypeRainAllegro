@@ -28,7 +28,7 @@ class Words
         void removeNLetters(Word* word, int count);
         std::atomic<bool> updateStop {false};
         Word* isIn(string s);
-        Word* lettersAreIn(string s);
+        vector<Word*> lettersAreIn(string s);
         vector<Word*> getWordsOnScreen();
         string getInputWord();
         void setInputWord(string s);

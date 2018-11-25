@@ -108,6 +108,7 @@ void Words::spawnRandomWords(int count) {
     }
 }
 
+// Check if entire word exists
 Word* Words::isIn(string s){
     if (!s.empty()) {
         for (Word* w : words_on_screen) { 
@@ -119,15 +120,17 @@ Word* Words::isIn(string s){
     return NULL;
 }
 
-Word* Words::lettersAreIn(string s){
+// check if s exists as sub string
+vector<Word*> Words::lettersAreIn(string s){
+    vector<Word*> result;
     if (!s.empty()) {
         for (Word* w : words_on_screen) { 
             if (!w->data.substr(0, s.size()).compare(s)) {
-                return w;
+                result.push_back(w);
             }
         }
     }
-    return NULL;
+    return result;
 }
 
 string Words::getInputWord() {

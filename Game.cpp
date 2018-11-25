@@ -116,13 +116,12 @@ void Game::handleInput(ALLEGRO_EVENT event){
 			if(!currentStr.empty()){
 				currentStr = currentStr.substr(0, currentStr.size()-1);
 				
-				// Color the input text
-				Word* targetWord = words_helper->lettersAreIn(currentStr);
-				if (targetWord == NULL){
+				// check which words contain the input string 
+				vector<Word*> targetWords = words_helper->lettersAreIn(currentStr);
+				if (targetWords.empty())
 					inputColor = al_map_rgb(255, 0, 0);
-				} else {
+				else
 					inputColor = al_map_rgb(255, 255, 255);
-				}
 			}
 			break;
 		default: /* Character inputs */
@@ -132,18 +131,19 @@ void Game::handleInput(ALLEGRO_EVENT event){
 				currentStr += key;
 
 				// Color the input text
-				Word* targetWord = words_helper->lettersAreIn(currentStr);
-				if (targetWord == NULL || targetWord->getY() > screen_height){
-					inputColor = al_map_rgb(255, 0, 0);
-				}
-				else {
-					inputColor = al_map_rgb(255, 255, 255);
-					// Launch projectile
-					lock.lock();
-					projectiles->spawnProjectile(
-						new Projectile(screen_width/2, screen_height-playerAreaHeight, 5, 10,
-							targetWord, targetWord->color));
-					lock.unlock();
+				vector<Word*> targetWords = words_helper->lettersAreIn(currentStr);
+				
+				for (Word* targetWord : targetWords) {
+					if (targetWord->getY() < 0){
+						inputColor = al_map_rgb(255, 0, 0);
+					}
+					else {
+						inputColor = al_map_rgb(255, 255, 255);
+						// Launch projectile
+						projectiles->spawnProjectile(
+							new Projectile(screen_width/2, screen_height-playerAreaHeight, 5, 10,
+								targetWord, targetWord->color));
+					}
 				}
 
 				break;
