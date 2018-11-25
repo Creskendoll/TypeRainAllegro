@@ -52,7 +52,11 @@ void Projectiles::updateProjectiles(unsigned int update_time) {
                         removeProjectile(p);
                     } else if (p->type == PROJECTILE_BOUNCE) {
                         Vector normal = w->heading;
-                        p->setY(p->getY() + normal.direction.y*5);
+                        
+                        // Push the projectile opposite the way its headed
+                        p->setY(p->getY() - p->heading.direction.y*5);
+                        p->setY(p->getX() - p->heading.direction.x*5);
+
                         double dotProd = p->heading.direction.x * normal.direction.x
                                         + p->heading.direction.y * normal.direction.y;
                         
