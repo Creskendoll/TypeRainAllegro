@@ -21,7 +21,8 @@ class Word : public GameObject
             return (this->data.compare(w.data) == 0);
         }
     private:
-        int letter_size = 30; // ???
+        void setBoundingBox(double _x, double _y);
+        int bBox_height = 30; // ???
 };
 
 #endif

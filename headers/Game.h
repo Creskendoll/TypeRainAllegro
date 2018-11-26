@@ -41,6 +41,7 @@ class Game
 		void handleInput(ALLEGRO_EVENT event);
 		std::mutex lock;
 		Projectiles* projectiles;
+		int points = 0;
 };
 
 #endif

@@ -1,30 +1,22 @@
 #include "headers/GameObject.h"
 
-bool GameObject::is_point_in_rectangle(BoundingBox b_box, Point p) {
-    return  (b_box.x1 <= p.x && b_box.x2 >= p.x) 
-                        &&
-            (b_box.y1 <= p.y && b_box.y2 >= p.y);
+bool GameObject::is_point_in_rectangle(BoundingBox* b_box, Point* p) {
+    return  (b_box->x1 <= p->getX() && b_box->x2 >= p->getX()) 
+                                    &&
+            (b_box->y1 <= p->getY() && b_box->y2 >= p->getY());
 }
 
 bool GameObject::checkCollision(GameObject* gameObject) {
-    Point pb1;
-    pb1.x = boundingBox.x1; pb1.y = boundingBox.y1;
-    Point pb2;
-    pb2.x = boundingBox.x2; pb2.y = boundingBox.y1;
-    Point pb3;
-    pb3.x = boundingBox.x1; pb3.y = boundingBox.y2;
-    Point pb4;
-    pb4.x = boundingBox.x2; pb4.y = boundingBox.y2;
+    Point* pa1 = new Point(gameObject->boundingBox->x1, gameObject->boundingBox->y1);
+    Point* pa2 = new Point(gameObject->boundingBox->x2, gameObject->boundingBox->y1);
+    Point* pa3 = new Point(gameObject->boundingBox->x1, gameObject->boundingBox->y2);
+    Point* pa4 = new Point(gameObject->boundingBox->x2, gameObject->boundingBox->y2);
     
-    Point pa1;
-    pa1.x = gameObject->boundingBox.x1; pa1.y = gameObject->boundingBox.y1;
-    Point pa2;
-    pa2.x = gameObject->boundingBox.x2; pa2.y = gameObject->boundingBox.y1;
-    Point pa3;
-    pa3.x = gameObject->boundingBox.x1; pa3.y = gameObject->boundingBox.y2;
-    Point pa4;
-    pa4.x = gameObject->boundingBox.x2; pa4.y = gameObject->boundingBox.y2;
-
+    Point* pb1 = new Point(boundingBox->x1, boundingBox->y1);
+    Point* pb2 = new Point(boundingBox->x2, boundingBox->y1);
+    Point* pb3 = new Point(boundingBox->x1, boundingBox->y2);
+    Point* pb4 = new Point(boundingBox->x2, boundingBox->y2);
+    
     if ( is_point_in_rectangle(boundingBox, pa1) ||
         is_point_in_rectangle(boundingBox, pa2) ||
         is_point_in_rectangle(boundingBox, pa3) ||
@@ -38,18 +30,18 @@ bool GameObject::checkCollision(GameObject* gameObject) {
     return false;
 }
 
-Point GameObject::getPosition() {
+Point* GameObject::getPosition() {
     return position;
 }
 void GameObject::setX(double _x) {
-    setPosition(_x, position.y);
+    setPosition(_x, position->getY());
 }
 void GameObject::setY(double _y){
-    setPosition(position.x, _y);
+    setPosition(position->getX(), _y);
 }
 double GameObject::getX() {
-    return position.x;
+    return position->getX();
 }
 double GameObject::getY() {
-    return position.y;
+    return position->getY();
 }
