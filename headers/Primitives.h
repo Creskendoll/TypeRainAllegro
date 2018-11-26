@@ -9,8 +9,6 @@ struct Point
 
 struct BoundingBox
 {
-    Point topLeft;
-    Point botRight;
     double x1;
     double y1;
     double x2;
