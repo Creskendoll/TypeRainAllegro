@@ -5,6 +5,7 @@
 #include "headers/Projectile.h"
 #include "headers/Projectiles.h"
 #include "headers/GameObject.h"
+#include <iostream>
 
 #define VERTICAL 10
 #define HORIZONTAL -10
@@ -191,7 +192,7 @@ void Game::start() {
 				al_draw_text(wordFont, w->color, w->getX(), w->getY(),
 					ALLEGRO_ALIGN_CENTER, w->data.c_str());
 				// bounding box of word
-				al_draw_rectangle(w->boundingBox.x1, w->boundingBox.y1, w->boundingBox.x2, w->boundingBox.y2, w->color, 3);
+				al_draw_rectangle(w->boundingBox->x1, w->boundingBox->y1, w->boundingBox->x2, w->boundingBox->y2, w->color, 3);
 			}
 
 			/* Draw user area */
@@ -200,6 +201,9 @@ void Game::start() {
 			al_draw_text(inputFont, inputColor, 
 				screen_width/24, screen_height-playerAreaHeight+10, ALLEGRO_ALIGN_LEFT, words_helper->getInputWord().c_str());
             
+			al_draw_text(inputFont, al_map_rgb(255,255,255), screen_width-screen_width/24, screen_height-playerAreaHeight+10, 
+				ALLEGRO_ALIGN_LEFT, std::to_string(points).c_str());
+
 			al_flip_display();
         }
 

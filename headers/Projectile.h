@@ -9,6 +9,8 @@
 
 class Word;
 class Projectile : public GameObject {
+    private:
+        void setBoundingBox(double _x, double _y);
     public:
         int size;
         int type = PROJECTILE_BOUNCE;

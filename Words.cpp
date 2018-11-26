@@ -1,6 +1,5 @@
 #include "headers/Word.h"
 #include "headers/Words.h"
-#include "headers/Helper.h"
 
 // TODO: game modes
 // incremental difficulty
@@ -58,7 +57,9 @@ void Words::updateWords(unsigned int update_time) {
 	while(true) {
 		if(!updateStop.load()) {
             for(Word* w : words_on_screen) {
+                mtx.lock();
                 w->move();
+                mtx.unlock();
                 if (w->getY() >= screen_height) {
                     eraseWord(w);
                     spawnRandomWords(1);

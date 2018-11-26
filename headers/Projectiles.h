@@ -18,6 +18,7 @@ private:
     Words* words;
     vector<Projectile*> projectiles_on_screen;
     thread updateProjectilesTask;
+    void setBoundingBox(double _x, double _y);
     void updateProjectile(Projectile* p, unsigned int update_time);
     Word* checkCollision(Projectile* p, vector<Word*>* words);
     mutex mtx;
