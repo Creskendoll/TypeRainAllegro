@@ -51,11 +51,12 @@ void Projectiles::updateProjectiles(unsigned int update_time) {
                     if (p->getY() > words->screen_height || p->getY() < 0 || p->getX() > words->screen_width || p->getX() < 0) {
                         removeProjectile(p);
                     } else if (p->type == PROJECTILE_BOUNCE) {
+                        // TODO: only works with horizontal lines
                         Vector normal = w->heading;
                         
                         // Push the projectile opposite the way its headed
-                        p->setY(p->getY() - p->heading.direction.y*5);
-                        p->setY(p->getX() - p->heading.direction.x*5);
+                        p->setY(p->getY() - p->heading.direction.y*10);
+                        p->setX(p->getX() - p->heading.direction.x*10);
 
                         double dotProd = p->heading.direction.x * normal.direction.x
                                         + p->heading.direction.y * normal.direction.y;

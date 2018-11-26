@@ -88,7 +88,7 @@ void Words::spawnRandomWords(int count) {
         int randR = rand() % 255;
         int randG = rand() % 255;
         int randB = rand() % 255;
-        Word* newWord = new Word(word, word_x, word_y, 2, al_map_rgb(randR, randG, randB));
+        Word* newWord = new Word(word, word_x, word_y, 1, al_map_rgb(randR, randG, randB));
 
         // check if words are colliding
         bool flag = true;
