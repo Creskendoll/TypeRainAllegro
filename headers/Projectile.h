@@ -12,14 +12,14 @@ class Projectile : public GameObject {
     private:
         void setBoundingBox(double _x, double _y);
     public:
-        int size;
+        double size;
         int type = PROJECTILE_BOUNCE;
         Word* targetWord;
         void setPosition(double _x, double _y);
         void move();
         double distance_to_target;
         ~Projectile();
-        Projectile(double _x, double _y, int _size, int _speed, Word* _targetWord, ALLEGRO_COLOR _color);
+        Projectile(double _x, double _y, double _size, int _speed, Word* _targetWord, ALLEGRO_COLOR _color);
 };
 
 #endif

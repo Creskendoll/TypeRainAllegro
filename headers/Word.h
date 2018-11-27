@@ -11,7 +11,7 @@ class Word : public GameObject
     public: 
         string data;
         void setPosition(double _x, double _y);
-        int size;
+        double size;
         int point; // TODO: calculated based on size and color 
         void move();
         ~Word();

@@ -3,7 +3,7 @@
 
 #include <math.h>
 
-Projectile::Projectile(double _x, double _y, int _size, int _speed, Word* _targetWord, ALLEGRO_COLOR _color) {
+Projectile::Projectile(double _x, double _y, double _size, int _speed, Word* _targetWord, ALLEGRO_COLOR _color) {
     position = new Point(_x, _y);
     setBoundingBox(_x, _y);
     size = _size;
@@ -15,16 +15,12 @@ Projectile::Projectile(double _x, double _y, int _size, int _speed, Word* _targe
     double distY = targetWord->getY() - _y;
     distance_to_target = sqrt(distX*distX + distY*distY);
 
-    heading->origin = position;
     // normalized direction
-    heading->direction = new Point(distX / distance_to_target, distY / distance_to_target);
+    heading = new Vector(position, new Point(distX/distance_to_target, distY/distance_to_target));
 }
 
 void Projectile::setBoundingBox(double _x, double _y) {
-    boundingBox->x1 = position->getX() - size;
-    boundingBox->y1 = position->getY() - size;
-    boundingBox->x2 = position->getX() + size;
-    boundingBox->y2 = position->getY() + size;
+    boundingBox = new BoundingBox(position->getX()-size, position->getY()-size, position->getX() + size, position->getY() + size);
 }
 
 void Projectile::setPosition(double _x, double _y) {

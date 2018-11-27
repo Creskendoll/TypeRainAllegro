@@ -15,7 +15,7 @@ class GameObject
         bool is_point_in_rectangle(BoundingBox* r, Point* p);
 
     public:
-        int speed;
+        double speed;
         Vector* heading;
         virtual void setPosition(double _x, double _y) = 0;
         virtual void move() = 0;
