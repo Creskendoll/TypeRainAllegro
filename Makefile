@@ -7,4 +7,4 @@ BIN_WIN = out.exe
 SOURCE = main.cpp Menu.cpp Game.cpp Projectile.cpp Word.cpp Words.cpp GameObject.cpp Projectiles.cpp 
 
 all:
-	$(CC) $(SOURCE) $(FLAGS) $(LIBS_WIN) -o $(BIN_WIN)
+	$(CC) $(SOURCE) $(FLAGS) $(LIBS) -o $(BIN)

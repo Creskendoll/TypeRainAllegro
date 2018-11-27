@@ -11,23 +11,24 @@ class GameObject
 {
     protected:
         virtual void setBoundingBox(double _x, double _y) = 0;
-        Point* position = new Point(0,0);
-        bool is_point_in_rectangle(BoundingBox* r, Point* p);
+        Point position = Point(0,0);
+        bool is_point_in_rectangle(BoundingBox r, Point p);
 
     public:
         double speed;
-        Vector* heading;
+        Vector heading;
         virtual void setPosition(double _x, double _y) = 0;
         virtual void move() = 0;
-        Point* getPosition();
+        Point getPosition();
         void setX(double _x);
         void setY(double _y);
         double getX();
         double getY();
         bool checkCollision(GameObject* gameObject);
-        BoundingBox* boundingBox;
+        BoundingBox boundingBox;
         ALLEGRO_COLOR color;
-        // GameObject(Point position, Vector heading, int speed, ALLEGRO_COLOR color);
+        //GameObject(Point position, Vector heading, int speed, ALLEGRO_COLOR color);
+        GameObject(){}
 };
 
 #endif

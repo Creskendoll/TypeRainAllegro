@@ -186,14 +186,16 @@ void Game::start() {
 				al_draw_filled_circle(p->getX(), p->getY(), p->size, p->color);
 			}
 
+			lock.lock();
 			/* Draw words */
 			for(Word* w : words_helper->getWordsOnScreen())
 			{
 				al_draw_text(wordFont, w->color, w->getX(), w->getY(),
 					ALLEGRO_ALIGN_CENTER, w->data.c_str());
 				// bounding box of word
-				al_draw_rectangle(w->boundingBox->x1, w->boundingBox->y1, w->boundingBox->x2, w->boundingBox->y2, w->color, 3);
+				al_draw_rectangle(w->boundingBox.x1, w->boundingBox.y1, w->boundingBox.x2, w->boundingBox.y2, w->color, 3);
 			}
+			lock.unlock();
 
 			/* Draw user area */
 			al_draw_filled_rectangle(0, screen_height-playerAreaHeight, screen_width, screen_height, al_map_rgb(0,0,0));
