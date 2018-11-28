@@ -39,8 +39,6 @@ void Projectiles::updateProjectiles(unsigned int update_time) {
         for (Projectile* p : projectiles_on_screen) {
             p->move();
 
-            // Make projectiles bounce
-
             // Remove if target collided
             for (Word* w : words->getWordsOnScreen()) {
                 if (p->checkCollision(w)) {
@@ -48,12 +46,12 @@ void Projectiles::updateProjectiles(unsigned int update_time) {
                     words->removeNLetters(w, 1);
                     string inputStr = words->getInputWord();
 
-                    if (p->getY() > words->screen_height || p->getY() < 0 || p->getX() > words->screen_width || p->getX() < 0) {
+                    if (p->getY() > words->screen_height || p->getY() < 0 
+                        || p->getX() > words->screen_width || p->getX() < 0) {
                         removeProjectile(p);
                     } else if (p->type == PROJECTILE_BOUNCE) {
-                        // TODO: only works with horizontal lines
-                        
                         Point pDir = p->heading.direction;
+
                         // Push the projectile opposite the way its headed
                         p->setX(p->getX() - pDir.getX()*5);
                         p->setY(p->getY() + pDir.getY()*5);
@@ -68,6 +66,7 @@ void Projectiles::updateProjectiles(unsigned int update_time) {
                     //check if collided word is the target word
                     if (p->targetWord == w) {
                         if (inputStr.length() > 1) {
+                            // erase the first letetr from input word
                             words->setInputWord(inputStr.substr(1, inputStr.length()));
                         } else {
                             words->setInputWord("");

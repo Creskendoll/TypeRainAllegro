@@ -1,2 +1,2 @@
 #!/bin/sh
-make && ./out
+make && ./bin/out

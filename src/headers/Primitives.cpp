@@ -11,13 +11,8 @@ class Point {
         void setX(double _x) { x = _x; }
         void setY(double _y) { y = _y; }
         void set(double _x, double _y) { setX(_x); setY(_y); }
-        Point(double _x, double _y) {
-            set(_x, _y);
-        }
-        Point () {
-            x = 0;
-            y = 0;
-        }
+        Point(double _x, double _y) { set(_x, _y); }
+        Point () { x = 0; y = 0; }
         double distanceTo(Point p){
             double distX = x-p.getX();
             double distY = y-p.getY();
@@ -57,19 +52,14 @@ class Vector {
             // Normalized direction
             direction = Point((d.getX()-o.getX())/magnitude(o), (o.getY()-d.getY())/magnitude(o));
         }
-        Vector() {
-            direction = Point();
-        }
+        Vector() { direction = Point(); }
 };
 
 class Line {
     public:
         Point a;
         Point b;
-        Line() {
-            a = Point();
-            b = Point();
-        }
+        Line() { a=Point(); b=Point(); }
         Line(Point _a, Point _b) { a = _a; b = _b; }
         Point getMiddle(){
             return Point( (a.getX()+b.getX())/2, (a.getY()+b.getY())/2 );
@@ -79,7 +69,8 @@ class Line {
             double dy = b.getY() - a.getY();
             Vector result;
             
-            double side = (p.getX()-a.getX())*(b.getY()-a.getY())-(p.getY()-a.getY())*(b.getX()-a.getX());
+            double side = (p.getX()-a.getX())*(b.getY()-a.getY())
+                            -(p.getY()-a.getY())*(b.getX()-a.getX());
 
             if (side >= 0)
                 result = Vector(Point(dy, -dx));

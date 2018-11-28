@@ -41,6 +41,7 @@ void Words::addWord(Word* word) {
 }
 void Words::removeNLetters(Word* w, int count) {
     string newData = w->data.substr(count, w->data.size()-1);
+    // If word is empty
     if (newData.empty()) {
         eraseWord(w);
         spawnRandomWords(1);
