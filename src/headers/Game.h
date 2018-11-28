@@ -11,6 +11,7 @@ using std::vector;
 using std::atomic;
 using std::thread;
 
+class Scores;
 class Word;
 class Words;
 class Menu;
@@ -42,6 +43,7 @@ class Game
 		std::mutex lock;
 		Projectiles* projectiles;
 		int points = 0;
+		Scores* scores; 
 };
 
 #endif

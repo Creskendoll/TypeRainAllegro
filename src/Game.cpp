@@ -5,6 +5,7 @@
 #include "headers/Projectile.h"
 #include "headers/Projectiles.h"
 #include "headers/GameObject.h"
+#include "headers/Scores.h"
 #include <iostream>
 
 #define VERTICAL 10
@@ -20,7 +21,8 @@ Game::Game(ALLEGRO_DISPLAY* d, ALLEGRO_EVENT_QUEUE* q) {
 	vector<string> opt = {"Resume", "Quit"};
 	inGameMenu = new Menu(display, queue, opt);
 
-	words_helper = new Words("src/words.txt", screen_height, screen_width);
+	scores = new Scores();
+	words_helper = new Words("src/words.txt", screen_height, screen_width, scores);
 	wordFont = al_load_ttf_font("fonts/ll_pixel.ttf", 20, 0);
 	inputFont = al_load_ttf_font("fonts/hemi_head.ttf", 20, 0);
 
@@ -207,14 +209,21 @@ void Game::start() {
 			}
 			lock.unlock();
 
+			for (Score* s : scores->scores_on_screen){
+				al_draw_text(wordFont, al_map_rgb(255,255,255), s->position.getX(),
+				 s->position.getY(), ALLEGRO_ALIGN_CENTER, ("+" + std::to_string(s->getScore())).c_str());
+				points += s->getScore();
+			}
+
 			/* Draw user area */
 			al_draw_filled_rectangle(0, screen_height-playerAreaHeight, screen_width, screen_height, al_map_rgb(0,0,0));
 			// draw input
 			al_draw_text(inputFont, inputColor, 
 				screen_width/24, screen_height-playerAreaHeight+10, ALLEGRO_ALIGN_LEFT, words_helper->getInputWord().c_str());
             
+			// Score
 			al_draw_text(inputFont, al_map_rgb(255,255,255), screen_width-screen_width/24, screen_height-playerAreaHeight+10, 
-				ALLEGRO_ALIGN_LEFT, std::to_string(points).c_str());
+				ALLEGRO_ALIGN_CENTER, std::to_string(points).c_str());
 
 			al_flip_display();
         }

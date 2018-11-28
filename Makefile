@@ -4,7 +4,7 @@ LIBS_WIN = -I/d/msys/mingw64/include -lallegro_image -lallegro_primitives -lalle
 FLAGS = -lpthread -Wall -g -lm
 BIN = bin/out
 BIN_WIN = bin/out.exe
-SOURCE = src/main.cpp src/Menu.cpp src/Game.cpp src/Projectile.cpp src/Word.cpp src/Words.cpp src/GameObject.cpp src/Projectiles.cpp 
+SOURCE = src/main.cpp src/Menu.cpp src/Game.cpp src/Projectile.cpp src/Word.cpp src/Words.cpp src/GameObject.cpp src/Projectiles.cpp src/Scores.cpp
 
 all:
 	$(CC) $(SOURCE) $(FLAGS) $(LIBS) -o $(BIN)

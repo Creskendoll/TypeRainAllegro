@@ -14,12 +14,12 @@ using std::tuple;
 using std::mutex;
 using std::thread;
 
-struct BoundingBox;
+class Scores;
 class Word;
 class Words
 {
     public:
-        Words(string file, int h, int w); // constructor 
+        Words(string file, int h, int w, Scores* _scores); // constructor 
         ~Words(); // deconstructor
         void spawnRandomWords(int count); /* To get the words which will be seen on the screen */
         void eraseWord(Word* word);
@@ -40,6 +40,7 @@ class Words
         vector<Word*> erase_words;
         thread updateWordsTask;
         string inputWord = "";
+        Scores* scores;
         mutex mtx; 
 };
 

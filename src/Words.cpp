@@ -1,11 +1,12 @@
 #include "headers/Word.h"
 #include "headers/Words.h"
+#include "headers/Scores.h"
 
 // TODO: game modes
 // incremental difficulty
 
 // Initialize all_words and fill it with all the words in the read file 
-Words::Words(string file, int h, int w)
+Words::Words(string file, int h, int w, Scores* _scores)
 {
     screen_height = h;
     screen_width = w;
@@ -26,6 +27,7 @@ Words::Words(string file, int h, int w)
     inFile.close();
 
     updateWordsTask = thread(&Words::updateWords, this, 30);
+    scores = _scores;
 }
 
 // Erase the given word from the vector
@@ -44,6 +46,8 @@ void Words::removeNLetters(Word* w, int count) {
     // If word is empty
     if (newData.empty()) {
         eraseWord(w);
+        // display score 
+        scores->addScore(new Score(w->point, w->getPosition(), 500));
         spawnRandomWords(1);
     }else{
         w->data = newData;
