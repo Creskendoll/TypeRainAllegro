@@ -53,12 +53,12 @@ void Projectiles::updateProjectiles(unsigned int update_time) {
                     } else if (p->type == PROJECTILE_BOUNCE) {
                         // TODO: only works with horizontal lines
                         
-                        // Vector normal = w->heading;
-                        Vector normal = w->boundingBox.getRelativeNormal(p->getPosition());
-                        
+                        Point pDir = p->heading.direction;
                         // Push the projectile opposite the way its headed
-                        p->setY(p->getY() + normal.direction.getY()*10);
-                        p->setX(p->getX() + normal.direction.getX()*10);
+                        p->setX(p->getX() - pDir.getX()*5);
+                        p->setY(p->getY() + pDir.getY()*5);
+                        
+                        Vector normal = w->boundingBox.getRelativeNormal(p->getPosition());
                         
                         p->heading = p->heading.reflect(normal);
                     } else {

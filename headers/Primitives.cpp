@@ -88,24 +88,27 @@ class Line {
 
             return result;
         }
+        double distanceToPoint(Point p) {
+            double divided = abs( (b.getY()-a.getY())*p.getX() - 
+                 (b.getX()-a.getX())*p.getY() +
+                  b.getX()*a.getY()-b.getY()*a.getX());
+            double divisor = sqrt( (b.getY()-a.getY())*(b.getY()-a.getY()) +
+                                    (b.getX()-a.getX())*(b.getX()-a.getX()) );
+
+            return divided / divisor;
+        }
 };
 
 class BoundingBox {
     private:
-        Line a;
-        Line b;
-        Line c;
-        Line d;
+        Line a; Line b;
+        Line c; Line d;
     public:
-        double x1;
-        double y1;
-        double x2;
-        double y2;
+        double x1; double y1;
+        double x2; double y2;
         BoundingBox() {
-            x1 = 0;
-            x2 = 0;
-            y1 = 0;
-            y2 = 0;
+            x1 = 0; x2 = 0;
+            y1 = 0; y2 = 0;
         }
         BoundingBox(double _x1, double _y1, double _x2, double _y2) {
             x1 = _x1; x2 = _x2;
@@ -116,12 +119,15 @@ class BoundingBox {
             d = Line(Point(x1, y2), Point(x1, y1));
         }
         Vector getRelativeNormal(Point p) {
-            double minDist = 99999999;
+            double minDist = -1;
             double dist;
             Line l;
             for (Line line : getLines()) {
-                dist = line.getMiddle().distanceTo(p);
-                if (dist < minDist){
+                dist = line.distanceToPoint(p);
+                if (minDist < 0) {
+                    minDist = dist;
+                    l = line;
+                } else if (dist < minDist){
                     minDist = dist;   
                     l = line;
                 }

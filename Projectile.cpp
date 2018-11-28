@@ -11,7 +11,11 @@ Projectile::Projectile(double _x, double _y, double _size, int _speed, Word* _ta
     color = _color;
     targetWord = _targetWord;
 
-    heading = Vector(position, targetWord->getPosition());
+    double travelTime = position.distanceTo(targetWord->getPosition()) / speed;
+    Point targetPoint = Point(targetWord->getX()+targetWord->heading.direction.getX()*targetWord->speed*travelTime,
+     targetWord->getY()+targetWord->heading.direction.getY()*targetWord->speed*travelTime);
+
+    heading = Vector(position, targetPoint);
 }
 
 void Projectile::setBoundingBox(double _x, double _y) {

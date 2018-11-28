@@ -196,14 +196,14 @@ void Game::start() {
 				al_draw_rectangle(w->boundingBox.x1, w->boundingBox.y1, w->boundingBox.x2, w->boundingBox.y2, w->color, 3);
 
 				// normals
-				Point middle = Point(screen_width/2, screen_width/2);
-				al_draw_filled_circle(middle.getX(), middle.getY(), 5, al_map_rgb(255,255,255));
-				for (Line line : w->boundingBox.getLines()) {
-					Point lineMid = line.getMiddle();
-					al_draw_line(lineMid.getX(), lineMid.getY(),
-						lineMid.getX()+line.getNormal(middle).direction.getX()*20,
-						lineMid.getY()+line.getNormal(middle).direction.getY()*20, al_map_rgb(255,255,255), 2);
-				}
+				// Point middle = Point(screen_width/2, screen_width/2);
+				// al_draw_filled_circle(middle.getX(), middle.getY(), 5, al_map_rgb(255,255,255));
+				// for (Line line : w->boundingBox.getLines()) {
+				// 	Point lineMid = line.getMiddle();
+				// 	al_draw_line(lineMid.getX(), lineMid.getY(),
+				// 		lineMid.getX()+line.getNormal(middle).direction.getX()*20,
+				// 		lineMid.getY()+line.getNormal(middle).direction.getY()*20, al_map_rgb(255,255,255), 2);
+				// }
 			}
 			lock.unlock();
 
