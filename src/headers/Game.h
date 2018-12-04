@@ -20,12 +20,14 @@ class Game
 {
     public:
         Game(ALLEGRO_DISPLAY* d, ALLEGRO_EVENT_QUEUE* q);
+        Game(ALLEGRO_DISPLAY* d, ALLEGRO_EVENT_QUEUE* q, Menu* m);
         Words* words_helper;
 		Menu* inGameMenu;
 		void set_difficulty(int dif);
 		void togglePause();
 		void start();
         ~Game();
+        std::atomic<bool> renderStop {false};
 
     private:
 	    ALLEGRO_EVENT_QUEUE* queue;
@@ -36,13 +38,11 @@ class Game
 		bool redraw;
 		int playerAreaHeight;
 		int screen_width, screen_height;
-        std::atomic<bool> renderStop {false};
 		int difficulty = 1;
 		void moveWords(int moveBy, int axis);
 		void handleInput(ALLEGRO_EVENT event);
 		std::mutex lock;
 		Projectiles* projectiles;
-		int points = 0;
 		Scores* scores; 
 };
 

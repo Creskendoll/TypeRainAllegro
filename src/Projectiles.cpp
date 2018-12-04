@@ -5,12 +5,14 @@
 #include <math.h>
 #include <bits/stdc++.h> 
 
-Projectiles::Projectiles(Words* _words)
-{
+Projectiles::Projectiles(Words* _words) {
     words = _words;
     updateProjectilesTask = thread(&Projectiles::updateProjectiles, this, 30);
 }
 
+Projectiles::~Projectiles() {
+    updateProjectilesTask.join();
+}
 vector<Projectile*> Projectiles::getProjectiles() {
     return projectiles_on_screen;
 }
@@ -53,10 +55,12 @@ void Projectiles::updateProjectiles(unsigned int update_time) {
                         Point pDir = p->heading.direction;
 
                         // Push the projectile opposite the way its headed
-                        p->setX(p->getX() - pDir.getX()*5);
-                        p->setY(p->getY() + pDir.getY()*5);
+                        p->setX(p->getX() - pDir.getX()*w->heading.direction.getX() * w->speed);
+                        p->setY(p->getY() + pDir.getY()*w->heading.direction.getY() * w->speed);
                         
+                        words->updateStop.store(true);
                         Vector normal = w->boundingBox.getRelativeNormal(p->getPosition());
+                        words->updateStop.store(false);
                         
                         p->heading = p->heading.reflect(normal);
                     } else {
@@ -78,8 +82,4 @@ void Projectiles::updateProjectiles(unsigned int update_time) {
         mtx.unlock();
         std::this_thread::sleep_for(std::chrono::milliseconds(update_time));
     }
-}
-
-Projectiles::~Projectiles()
-{
 }

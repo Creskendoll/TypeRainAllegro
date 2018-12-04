@@ -48,11 +48,12 @@ void Menu::initMenu(Game* game) {
     menu_running = true;
     int selection = 0;
     int buttonCount = options.size();
-    while(menu_running) {
+    while(true) {
+        if (menu_running) {
         ALLEGRO_EVENT event;
         al_wait_for_event(queue, &event);
         if (event.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
-            break;
+            exit(0);
 
         /* Button Press */
         if (event.type == ALLEGRO_EVENT_KEY_DOWN) {
@@ -91,6 +92,7 @@ void Menu::initMenu(Game* game) {
             drawButtons(selection);
             al_flip_display();
         }
+        }
     }
 }
 
@@ -100,10 +102,11 @@ void Menu::makeSelection(int selection, Game* game) {
         {
             case 0: /* Resume */
                 menu_running = false;
+                game->togglePause();
                 break;
             case 1: /* Quit */
-                menu_running = false;
-                // game->~Game();
+                game-> renderStop.store(true);
+                menu_running = true;
                 break;
             default:
                 break;
@@ -114,17 +117,19 @@ void Menu::makeSelection(int selection, Game* game) {
             case 0: /* EASY */
             {
                 menu_running = false;
-                game = new Game(display, queue);
+                game = new Game(display, queue, this);
                 game -> set_difficulty(1);
                 game -> start();
+                game -> ~Game();
                 break;
             }
             case 1: /* HARD */
             {
                 menu_running = false;
-                game = new Game(display, queue);
+                game = new Game(display, queue, this);
                 game -> set_difficulty(2);
                 game -> start();
+                game -> ~Game();
                 break;
             }
             case 2: /* MULTIPLAYER */

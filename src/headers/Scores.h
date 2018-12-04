@@ -28,11 +28,14 @@ private:
     std::thread updatePointsTask;
     void updatePoints(unsigned int update_time);
     std::mutex mtx;
+    int totalScore = 0;
 public:
     std::vector<Score*> scores_on_screen;
     Scores();
     void removeScore(Score* s);
     void addScore(Score* s);
+    void setTotalScore(int score);
+    int getTotalScore();
 };
 
 #endif

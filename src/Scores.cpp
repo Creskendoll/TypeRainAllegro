@@ -21,8 +21,17 @@ void Scores::removeScore(Score* s) {
 }
 void Scores::addScore(Score* s) {
     mtx.lock();
+    totalScore += s->getScore();
     scores_on_screen.push_back(s);
     mtx.unlock();
+}
+void Scores::setTotalScore(int score) {
+    mtx.lock();
+    totalScore += score;
+    mtx.unlock();
+}
+int Scores::getTotalScore() {
+    return totalScore;
 }
 
 void Scores::updatePoints(unsigned int update_time) {

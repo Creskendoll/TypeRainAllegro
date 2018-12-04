@@ -61,4 +61,5 @@ int main(void) {
     /* Run the game */
     Menu* menu = new Menu(display, queue, mainMenuOptions);
     menu -> initMenu(NULL);
+    menu -> ~Menu();
 }

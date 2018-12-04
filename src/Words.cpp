@@ -26,10 +26,13 @@ Words::Words(string file, int h, int w, Scores* _scores)
     
     inFile.close();
 
-    updateWordsTask = thread(&Words::updateWords, this, 30);
+    updateWordsTask = thread(&Words::updateWords, this, 50);
     scores = _scores;
 }
 
+Words::~Words() {
+    updateWordsTask.join();
+}
 // Erase the given word from the vector
 void Words::eraseWord(Word* word) {
     mtx.lock();
@@ -48,7 +51,7 @@ void Words::removeNLetters(Word* w, int count) {
         eraseWord(w);
         // display score 
         scores->addScore(new Score(w->point, w->getPosition(), 500));
-        spawnRandomWords(1);
+        spawnRandomWords(1, difficulty, 3);
     }else{
         w->data = newData;
     }
@@ -67,7 +70,7 @@ void Words::updateWords(unsigned int update_time) {
                 mtx.unlock();
                 if (w->getY() >= screen_height) {
                     eraseWord(w);
-                    spawnRandomWords(1);
+                    spawnRandomWords(1, difficulty, 3);
                 }
 
                 if (inputWord == w->data) {
@@ -81,11 +84,11 @@ void Words::updateWords(unsigned int update_time) {
 }
 
 // fills words on screen with a set of {count} words
-void Words::spawnRandomWords(int count) {
+void Words::spawnRandomWords(int count, int maxSpeed, int speedVarience) {
     for(int i = 0; i < count; i++)
     {
-        int randomIndex = rand() % this->all_words.size();
-        string word = this->all_words.at(randomIndex);
+        int randomIndex = rand() % all_words.size();
+        string word = all_words.at(randomIndex);
         int word_y, word_x;
         word_x = (rand() % (screen_width-word.size()*20)) + word.size()*10;
         word_y = -(rand() % screen_height) * 2;
@@ -94,8 +97,11 @@ void Words::spawnRandomWords(int count) {
         int randR = rand() % 255;
         int randG = rand() % 255;
         int randB = rand() % 255;
-        Word* newWord = new Word(word, word_x, word_y, 1, al_map_rgb(randR, randG, randB));
 
+        int varience = (rand() % speedVarience) + 1;
+        int speed = ( (rand() % maxSpeed) + 1 ) * varience;
+
+        Word* newWord = new Word(word, word_x, word_y, speed, al_map_rgb(randR, randG, randB));
         // check if words are colliding
         bool flag = true;
         while (flag) {
@@ -105,7 +111,7 @@ void Words::spawnRandomWords(int count) {
                     flag = true;
                     word_y = -(rand() % screen_height) * 2;
                     word_x = (rand() % (screen_width-word.size()*20)) + word.size()*10;
-                    newWord = new Word(word, word_x, word_y, 2, al_map_rgb(randR, randG, randB));
+                    newWord = new Word(word, word_x, word_y, speed, al_map_rgb(randR, randG, randB));
                 }
             }
         }

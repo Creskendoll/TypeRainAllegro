@@ -13,16 +13,16 @@ class Game;
 class Menu
 {
 private:
-    ALLEGRO_EVENT_QUEUE* queue;
-    ALLEGRO_DISPLAY* display;
     ALLEGRO_FONT* font;
     Game* game;
     bool menu_redraw = true;
-    vector<string> options;
     int screen_width, screen_height;
     void drawButtons(int selection);
     void makeSelection(int selection, Game* Game);
 public:
+    ALLEGRO_EVENT_QUEUE* queue;
+    ALLEGRO_DISPLAY* display;
+    vector<string> options;
     bool menu_running = false;
     Menu(ALLEGRO_DISPLAY *display, ALLEGRO_EVENT_QUEUE* _queue, vector<string> _options);
     void initMenu(Game* game);
