@@ -11,46 +11,32 @@
 #define VERTICAL 10
 #define HORIZONTAL -10
 
-Game::Game(ALLEGRO_DISPLAY* d, ALLEGRO_EVENT_QUEUE* q) {
+Game::Game(ALLEGRO_DISPLAY* d, ALLEGRO_EVENT_QUEUE* q, Menu* m) {
 	display = d;
 	queue = q;
 	screen_height = al_get_display_height(d);
 	screen_width = al_get_display_width(d);
 	playerAreaHeight = screen_height / 12;
 
-	vector<string> opt = {"Resume", "Quit"};
-	inGameMenu = new Menu(display, queue, opt);
-
-	scores = new Scores();
-	words_helper = new Words("src/words.txt", screen_height, screen_width, scores);
+	/*	GAME ELEMENTS	*/
+	init();
+	
 	wordFont = al_load_ttf_font("fonts/ll_pixel.ttf", 20, 0);
 	inputFont = al_load_ttf_font("fonts/hemi_head.ttf", 20, 0);
 
-	projectiles = new Projectiles(words_helper);
+	inGameMenu = m;
+	m->initMenu(this);
 }
 
-Game::Game(ALLEGRO_DISPLAY* d, ALLEGRO_EVENT_QUEUE* q, Menu* menu) {
-	display = d;
-	queue = q;
-	screen_height = al_get_display_height(d);
-	screen_width = al_get_display_width(d);
-	playerAreaHeight = screen_height / 12;
-
-	menu->options = {"Resume", "Quit"};
-	inGameMenu = menu;
-
+void Game::init() {
+	/*	GAME ELEMENTS	*/
 	scores = new Scores();
 	words_helper = new Words("src/words.txt", screen_height, screen_width, scores);
-	wordFont = al_load_ttf_font("fonts/ll_pixel.ttf", 20, 0);
-	inputFont = al_load_ttf_font("fonts/hemi_head.ttf", 20, 0);
-
 	projectiles = new Projectiles(words_helper);
 }
 
 Game::~Game() {
-	words_helper->~Words();
-	projectiles->~Projectiles();
-	inGameMenu->~Menu();
+	renderStop.store(true);
 }
 
 void Game::set_difficulty(int diff){
@@ -60,15 +46,17 @@ void Game::set_difficulty(int diff){
 	} else {
 		difficulty = 1;
 	}
-	words_helper->difficulty = diff;
 }
 
 void Game::togglePause() {
-	words_helper->updateStop.store(!words_helper->updateStop.load());
-	// renderStop.store(!renderStop.load());
-	inGameMenu->display = display;
-	inGameMenu->queue = queue;
-	inGameMenu->menu_running = !inGameMenu->menu_running;
+	renderStop.store(true);
+	if(!inGameMenu->menu_running) {
+		inGameMenu->options = {"Resume", "Quit"};
+		inGameMenu->initMenu(this);
+	}else {
+		inGameMenu->menu_running = false;
+	}
+	renderStop.store(false);
 }
 
 void Game::moveWords(int moveBy, int axis) {
@@ -174,12 +162,21 @@ void Game::handleInput(ALLEGRO_EVENT event){
 	words_helper->setInputWord(currentStr);
 }
 
+void Game::update() {
+	if (frameCount % 3 == 0) {
+		words_helper->updateWords();
+		projectiles->updateProjectiles();
+	}
+	scores->updatePoints();
+}
+
 void Game::start() {
+	init();
 	// Init the words
-	words_helper->spawnRandomWords(15, difficulty, 3);
+	words_helper->spawnRandomWords(15, 3, 2);
+
 	// Render everything
-	while(true) {
-		if(!renderStop.load()) {
+	while(!renderStop.load()) {
 		ALLEGRO_EVENT event;
         al_wait_for_event(queue, &event);
         if (event.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
@@ -200,9 +197,14 @@ void Game::start() {
         }
 		if (redraw && al_is_event_queue_empty(queue)) {
             redraw = false;
-
-            al_clear_to_color(al_map_rgb(50, 0, 150));
-
+            al_clear_to_color(al_map_rgb(0, 50, 100));
+			if (frameCount < 60)
+				frameCount++;
+			else 
+				frameCount = 0;
+			/* Update game elements */
+			update();
+			
 			/* Draw Projectiles */
 			for (Projectile* p : projectiles->getProjectiles()) {
 				al_draw_filled_circle(p->getX(), p->getY(), p->size, p->color);
@@ -249,6 +251,5 @@ void Game::start() {
 
 		// Player stats
 		// TODO: Health bar, points, difficulty, level(?)
-		}
 	}
 }

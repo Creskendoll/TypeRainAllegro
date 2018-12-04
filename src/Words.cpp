@@ -26,7 +26,7 @@ Words::Words(string file, int h, int w, Scores* _scores)
     
     inFile.close();
 
-    updateWordsTask = thread(&Words::updateWords, this, 50);
+    // updateWordsTask = thread(&Words::updateWordsAsync, this, 50);
     scores = _scores;
 }
 
@@ -34,23 +34,40 @@ Words::~Words() {
     updateWordsTask.join();
 }
 // Erase the given word from the vector
-void Words::eraseWord(Word* word) {
+void Words::eraseWordAsync(Word* word) {
     mtx.lock();
     words_on_screen.erase(std::remove(words_on_screen.begin(), words_on_screen.end(), word), words_on_screen.end());
     mtx.unlock();
 }
-void Words::addWord(Word* word) {
+void Words::addWordAsync(Word* word) {
     mtx.lock();
     words_on_screen.push_back(word);
     mtx.unlock();
 }
+void Words::setInputWordAsync(string s) {
+    mtx.lock();
+    inputWord = s;
+    mtx.unlock();
+}
+
+string Words::getInputWord() { return inputWord; }
+void Words::setInputWord(string s) { inputWord = s; }
+// Erase the given word from the vector
+void Words::eraseWord(Word* word) {
+    words_on_screen.erase(std::remove(words_on_screen.begin(), words_on_screen.end(), word), words_on_screen.end());
+}
+void Words::addWord(Word* word) {
+    words_on_screen.push_back(word);
+}
+
+
 void Words::removeNLetters(Word* w, int count) {
     string newData = w->data.substr(count, w->data.size()-1);
     // If word is empty
     if (newData.empty()) {
         eraseWord(w);
         // display score 
-        scores->addScore(new Score(w->point, w->getPosition(), 500));
+        scores->addScore(new Score(w->point, w->getPosition(), 40));
         spawnRandomWords(1, difficulty, 3);
     }else{
         w->data = newData;
@@ -61,7 +78,7 @@ vector<Word*> Words::getWordsOnScreen() {
     return words_on_screen;
 }
 
-void Words::updateWords(unsigned int update_time) {
+void Words::updateWordsAsync(unsigned int update_time) {
 	while(true) {
 		if(!updateStop.load()) {
             for(Word* w : words_on_screen) {
@@ -69,18 +86,33 @@ void Words::updateWords(unsigned int update_time) {
                 w->move();
                 mtx.unlock();
                 if (w->getY() >= screen_height) {
-                    eraseWord(w);
+                    eraseWordAsync(w);
                     spawnRandomWords(1, difficulty, 3);
                 }
 
                 if (inputWord == w->data) {
-                    setInputWord("");
+                    setInputWordAsync("");
                 }
             }
 			// wait between updates
 			std::this_thread::sleep_for(std::chrono::milliseconds(update_time));
 		}
 	}
+}
+void Words::updateWords() {
+    if(!updateStop.load()) {
+        for(Word* w : words_on_screen) {
+            w->move();
+            if (w->getY() >= screen_height) {
+                eraseWord(w);
+                spawnRandomWords(1, difficulty, 3);
+            }
+
+            if (inputWord == w->data) {
+                setInputWord("");
+            }
+        }
+    }
 }
 
 // fills words on screen with a set of {count} words
@@ -143,14 +175,4 @@ vector<Word*> Words::lettersAreIn(string s){
         }
     }
     return result;
-}
-
-string Words::getInputWord() {
-    return inputWord;
-}
-
-void Words::setInputWord(string s) {
-    mtx.lock();
-    inputWord = s;
-    mtx.unlock();
 }

@@ -26,6 +26,8 @@ class Game
 		void set_difficulty(int dif);
 		void togglePause();
 		void start();
+		void update();
+		void init();
         ~Game();
         std::atomic<bool> renderStop {false};
 
@@ -44,6 +46,7 @@ class Game
 		std::mutex lock;
 		Projectiles* projectiles;
 		Scores* scores; 
+		int frameCount = 0;
 };
 
 #endif

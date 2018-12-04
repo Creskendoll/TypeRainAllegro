@@ -11,9 +11,11 @@ Projectile::Projectile(double _x, double _y, double _size, int _speed, Word* _ta
     color = _color;
     targetWord = _targetWord;
 
-    double travelTime = position.distanceTo(targetWord->getPosition()) / speed;
-    Point targetPoint = Point(targetWord->getX()+targetWord->heading.direction.getX()*targetWord->speed*travelTime,
-     targetWord->getY()+targetWord->heading.direction.getY()*targetWord->speed*travelTime);
+    double travelTime = position.distanceTo( targetWord->getPosition() ) / speed;
+    double futurePosX = targetWord->getX()+targetWord->heading.direction.getX()*targetWord->speed*travelTime;
+    double futurePosY = targetWord->getY()+targetWord->heading.direction.getY()*targetWord->speed*travelTime;
+
+    Point targetPoint = Point(futurePosX, futurePosY);
 
     heading = Vector(position, targetPoint);
 }

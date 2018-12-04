@@ -46,10 +46,10 @@ void Menu::drawButtons(int selection) {
 
 void Menu::initMenu(Game* game) {
     menu_running = true;
+    game = game;
     int selection = 0;
     int buttonCount = options.size();
-    while(true) {
-        if (menu_running) {
+    while(menu_running) {
         ALLEGRO_EVENT event;
         al_wait_for_event(queue, &event);
         if (event.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
@@ -92,54 +92,51 @@ void Menu::initMenu(Game* game) {
             drawButtons(selection);
             al_flip_display();
         }
-        }
     }
 }
 
 void Menu::makeSelection(int selection, Game* game) {
-    if(game != NULL) {
-        switch (selection)
-        {
-            case 0: /* Resume */
-                menu_running = false;
-                game->togglePause();
-                break;
-            case 1: /* Quit */
-                game-> renderStop.store(true);
-                menu_running = true;
-                break;
-            default:
-                break;
-        }
-    } else {
-        switch (selection)
-        {
-            case 0: /* EASY */
+        if (options.at(0) == "Resume") {
+            switch (selection)
             {
-                menu_running = false;
-                game = new Game(display, queue, this);
-                game -> set_difficulty(1);
-                game -> start();
-                game -> ~Game();
-                break;
+                case 0: /* Resume */
+                    game->togglePause();
+                    break;
+                case 1: /* Quit */
+                    options = {"Easy", "Hard", "Multiplayer", "Quit"};
+                    initMenu(game);
+                    break;
+                default:
+                    break;
             }
-            case 1: /* HARD */
+        } else {
+
+            switch (selection)
             {
-                menu_running = false;
-                game = new Game(display, queue, this);
-                game -> set_difficulty(2);
-                game -> start();
-                game -> ~Game();
-                break;
+                case 0: /* EASY */
+                {
+                    menu_running = false;
+                    game -> set_difficulty(1);
+                    game -> start();
+                    // game -> ~Game();
+                    break;
+                }
+                case 1: /* HARD */
+                {
+                    menu_running = false;
+                    game -> set_difficulty(2);
+                    game -> start();
+                    // game -> ~Game();
+                    break;
+                }
+                case 2: /* MULTIPLAYER */
+                    break;
+                case 3: /* QUIT */
+                    menu_running = false;
+                    al_destroy_display(display);
+                    break;
+                default:
+                    break;
             }
-            case 2: /* MULTIPLAYER */
-                break;
-            case 3: /* QUIT */
-                menu_running = false;
-                al_destroy_display(display);
-                break;
-            default:
-                break;
         }
-    }
 }

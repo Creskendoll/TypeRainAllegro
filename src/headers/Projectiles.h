@@ -25,10 +25,18 @@ private:
 public:
     Projectiles(Words* _words);
     ~Projectiles();
+    void updateProjectiles();
+    void updateProjectilesAsync(unsigned int update_time);
+    
     void spawnProjectile(Projectile* p);
-    void updateProjectiles(unsigned int update_time);
-    void removeProjectile(Projectile* p);
+    void spawnProjectileAsync(Projectile* p);
+    
     void clearProjectiles();
+    void clearProjectilesAsync();
+
+    void removeProjectile(Projectile* p);
+    void removeProjectileAsync(Projectile* p);
+    
     Projectile getProjectile(int index);
     vector<Projectile*> getProjectiles();
 };

@@ -2,7 +2,7 @@
 #include "headers/Menu.h"
 #include "headers/Game.h"
 
-const float FPS = 60;
+const float FPS = 240;
 
 int main(void) {
     /* Our window. */
@@ -60,6 +60,9 @@ int main(void) {
 
     /* Run the game */
     Menu* menu = new Menu(display, queue, mainMenuOptions);
-    menu -> initMenu(NULL);
-    menu -> ~Menu();
+    Game* game = new Game(display, queue, menu);
+
+    game -> ~Game();
+    // menu -> initMenu(NULL);
+    // menu -> ~Menu();
 }

@@ -21,17 +21,24 @@ class Words
     public:
         Words(string file, int h, int w, Scores* _scores); // constructor 
         ~Words(); // deconstructor
+        void updateWords();
         void spawnRandomWords(int count, int maxSpeed, int speedVarience); /* To get the words which will be seen on the screen */
         void eraseWord(Word* word);
         void addWord(Word* word);
-        void updateWords(unsigned int update_time);
+        void setInputWord(string s);
+        
+        void spawnRandomWordsAsync(int count, int maxSpeed, int speedVarience); /* To get the words which will be seen on the screen */
+        void eraseWordAsync(Word* word);
+        void addWordAsync(Word* word);
+        void updateWordsAsync(unsigned int update_time);
+        void setInputWordAsync(string s);
+        
         void removeNLetters(Word* word, int count);
         std::atomic<bool> updateStop {false};
         Word* isIn(string s);
         vector<Word*> lettersAreIn(string s);
         vector<Word*> getWordsOnScreen();
         string getInputWord();
-        void setInputWord(string s);
         int screen_height,screen_width;
         int difficulty = 1;
 
