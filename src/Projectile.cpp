@@ -12,8 +12,8 @@ Projectile::Projectile(double _x, double _y, double _size, int _speed, Word* _ta
     targetWord = _targetWord;
 
     double travelTime = position.distanceTo( targetWord->getPosition() ) / speed;
-    double futurePosX = targetWord->getX()+targetWord->heading.direction.getX()*targetWord->speed*travelTime;
-    double futurePosY = targetWord->getY()+targetWord->heading.direction.getY()*targetWord->speed*travelTime;
+    double futurePosX = targetWord->getX()+targetWord->heading.direction.getX()*targetWord->speed*travelTime / 2;
+    double futurePosY = targetWord->getY()+targetWord->heading.direction.getY()*targetWord->speed*travelTime / 2;
 
     Point targetPoint = Point(futurePosX, futurePosY);
 

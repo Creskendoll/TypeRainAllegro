@@ -149,7 +149,7 @@ void Game::handleInput(ALLEGRO_EVENT event){
 					}
 					else {
 						inputColor = al_map_rgb(255, 255, 255);
-						Projectile* p = new Projectile(screen_width/2, screen_height-playerAreaHeight, 5, 15,
+						Projectile* p = new Projectile(screen_width/2, screen_height-playerAreaHeight, 5, 8,
 								targetWord, targetWord->color);
 						// Launch projectile
 						projectiles->spawnProjectile(p);
@@ -165,8 +165,8 @@ void Game::handleInput(ALLEGRO_EVENT event){
 void Game::update() {
 	if (frameCount % 3 == 0) {
 		words_helper->updateWords();
-		projectiles->updateProjectiles();
 	}
+	projectiles->updateProjectiles();
 	scores->updatePoints();
 }
 

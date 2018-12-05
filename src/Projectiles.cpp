@@ -57,11 +57,9 @@ void Projectiles::updateProjectilesAsync(unsigned int update_time) {
                         || p->getX() > words->screen_width || p->getX() < 0) {
                         removeProjectile(p);
                     } else if (p->type == PROJECTILE_BOUNCE) {
-                        Point pDir = p->heading.direction;
-
                         // Push the projectile opposite the way its headed
-                        p->setX(p->getX() - pDir.getX()*w->heading.direction.getX() * w->speed);
-                        p->setY(p->getY() + pDir.getY()*w->heading.direction.getY() * w->speed);
+                        p->setX(p->getX() - w->heading.direction.getX() * w->speed);
+                        p->setY(p->getY() + w->heading.direction.getY() * w->speed);
                         
                         words->updateStop.store(true);
                         Vector normal = w->boundingBox.getRelativeNormal(p->getPosition());
@@ -91,7 +89,6 @@ void Projectiles::updateProjectilesAsync(unsigned int update_time) {
 void Projectiles::updateProjectiles() {
         for (Projectile* p : projectiles_on_screen) {
             p->move();
-
             // Remove if target collided
             for (Word* w : words->getWordsOnScreen()) {
                 if (p->checkCollision(w)) {
@@ -104,8 +101,8 @@ void Projectiles::updateProjectiles() {
                         removeProjectile(p);
                     } else if (p->type == PROJECTILE_BOUNCE) {
                         // Push the projectile opposite the way its headed
-                        p->setX(p->getX() - p->heading.direction.getX() * 10);
-                        p->setY(p->getY() + p->heading.direction.getY() * 10);
+                        p->setX(p->getX() - p->heading.direction.getX() * p->speed  + w->heading.direction.getX() * w->speed);
+                        p->setY(p->getY() + p->heading.direction.getY() * p->speed  + w->heading.direction.getY() * w->speed);
                         
                         Vector normal = w->boundingBox.getRelativeNormal(p->getPosition());
 
