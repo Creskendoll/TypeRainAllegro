@@ -44,6 +44,29 @@ void Menu::drawButtons(int selection) {
     }
 }
 
+int Menu::mouseOverButton(int mouse_x, int mouse_y) {
+    int buttonCount = options.size();
+
+    int grid_H = screen_height / 12;
+    int grid_W = screen_width / 12;
+
+    int buttonHeight = grid_H * 3;
+    int buttonWidth = grid_W * 8; 
+
+    int sel = -1;
+    // TODO: Even out the buttons
+    int margin = grid_H/2;
+
+    for(int i = 0; i < buttonCount; i++) {
+        if (mouse_x >= grid_W * 2 && buttonWidth + (grid_W * 2) &&
+            mouse_y >= (buttonHeight * i) + margin && mouse_y <= buttonHeight * (i+1)) {
+            sel = i;
+        }
+    }
+
+    return sel;
+}
+
 void Menu::initMenu(Game* game) {
     menu_running = true;
     game = game;
@@ -77,6 +100,18 @@ void Menu::initMenu(Game* game) {
             if (event.keyboard.keycode == ALLEGRO_KEY_ESCAPE)
                 break;
         }
+
+        if(event.type == ALLEGRO_EVENT_MOUSE_AXES || event.type == ALLEGRO_EVENT_MOUSE_ENTER_DISPLAY) {
+            int mouse_x = event.mouse.x;
+            int mouse_y = event.mouse.y;
+            int sel = mouseOverButton(mouse_x, mouse_y);
+            if (sel != -1) 
+                selection = sel; 
+        }
+        else if(event.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
+            makeSelection(selection, game);
+        }
+        
         if (event.type == ALLEGRO_EVENT_TIMER)
             menu_redraw = true;
         if (event.type == ALLEGRO_EVENT_DISPLAY_RESIZE) {
@@ -110,7 +145,6 @@ void Menu::makeSelection(int selection, Game* game) {
                     break;
             }
         } else {
-
             switch (selection)
             {
                 case 0: /* EASY */

@@ -19,6 +19,7 @@ private:
     int screen_width, screen_height;
     void drawButtons(int selection);
     void makeSelection(int selection, Game* Game);
+    int mouseOverButton(int mouse_x, int mouse_y);
 public:
     ALLEGRO_EVENT_QUEUE* queue;
     ALLEGRO_DISPLAY* display;

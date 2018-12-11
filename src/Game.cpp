@@ -8,14 +8,23 @@
 #include "headers/Scores.h"
 #include <iostream>
 
+// Graphics, eraser as projectile, atom as fire, words as paper
+// Color
+// Health is score
+// Use specials with score
+// Special words
+// Atom bomb, super projectile
+// Projectile launcher
+// CO-OP and VS mode
+
 #define VERTICAL 10
 #define HORIZONTAL -10
 
 Game::Game(ALLEGRO_DISPLAY* d, ALLEGRO_EVENT_QUEUE* q, Menu* m) {
 	display = d;
 	queue = q;
-	screen_height = al_get_display_height(d);
-	screen_width = al_get_display_width(d);
+	screen_height = al_get_display_height(display);
+	screen_width = al_get_display_width(display);
 	playerAreaHeight = screen_height / 12;
 
 	/*	GAME ELEMENTS	*/
@@ -29,6 +38,9 @@ Game::Game(ALLEGRO_DISPLAY* d, ALLEGRO_EVENT_QUEUE* q, Menu* m) {
 }
 
 void Game::init() {
+	screen_height = al_get_display_height(display);
+	screen_width = al_get_display_width(display);
+	
 	/*	GAME ELEMENTS	*/
 	scores = new Scores();
 	words_helper = new Words("src/words.txt", screen_height, screen_width, scores);
@@ -172,6 +184,7 @@ void Game::update() {
 
 void Game::start() {
 	init();
+	
 	// Init the words
 	words_helper->spawnRandomWords(15, 3, 2);
 
@@ -193,11 +206,14 @@ void Game::start() {
             al_acknowledge_resize(display);
             screen_width = al_get_display_width(display);
             screen_height = al_get_display_height(display);
+			words_helper->screen_height = screen_height; 
+			words_helper->screen_width = screen_width; 
             redraw = true;
         }
 		if (redraw && al_is_event_queue_empty(queue)) {
             redraw = false;
-            al_clear_to_color(al_map_rgb(0, 50, 100));
+            al_clear_to_color(al_map_rgb(50, 50, 50));
+			
 			if (frameCount < 60)
 				frameCount++;
 			else 
@@ -214,11 +230,14 @@ void Game::start() {
 			/* Draw words */
 			for(Word* w : words_helper->getWordsOnScreen())
 			{
+				al_draw_bitmap(w->image, w->getX()-(al_get_bitmap_width(w->image)/2), w->getY(), ALLEGRO_ALIGN_CENTER);
+
+				// bounding box of word
+				// al_draw_rectangle(w->boundingBox.x1, w->boundingBox.y1, w->boundingBox.x2, w->boundingBox.y2, w->color, 3);
+
 				al_draw_text(wordFont, w->color, w->getX(), w->getY(),
 					ALLEGRO_ALIGN_CENTER, w->data.c_str());
-				// bounding box of word
-				al_draw_rectangle(w->boundingBox.x1, w->boundingBox.y1, w->boundingBox.x2, w->boundingBox.y2, w->color, 3);
-
+				
 				// normals
 				// Point middle = Point(screen_width/2, screen_width/2);
 				// al_draw_filled_circle(middle.getX(), middle.getY(), 5, al_map_rgb(255,255,255));

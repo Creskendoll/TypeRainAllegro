@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "headers/Menu.h"
 #include "headers/Game.h"
+#include "allegro5/allegro_image.h"
 
 const float FPS = 240;
 
@@ -23,9 +24,11 @@ int main(void) {
 	}
     al_install_mouse();
     al_install_keyboard();
+    al_install_mouse();
     al_init_primitives_addon();
     al_init_font_addon();
     al_init_ttf_addon();
+    al_init_image_addon();
 
     // Initialize the timer
 	timer = al_create_timer(1.0 / FPS);
@@ -36,12 +39,15 @@ int main(void) {
 
     /* Create our window. */
     al_set_new_display_flags(ALLEGRO_RESIZABLE);
-    display = al_create_display(720, 720);
+    display = al_create_display(1370, 700);
     if (!display) {
 		fprintf(stderr, "Failed to create display.\n");
         return 1;
 	}
     al_set_window_title(display, "Type Rain");
+
+    // experimental
+    al_set_target_bitmap(al_get_backbuffer(display));
 
 	// Create the event queue
 	queue = al_create_event_queue();
@@ -54,6 +60,7 @@ int main(void) {
     al_register_event_source(queue, al_get_keyboard_event_source());
     al_register_event_source(queue, al_get_display_event_source(display));
     al_register_event_source(queue, al_get_timer_event_source(timer));
+    al_register_event_source(queue, al_get_mouse_event_source());
 
 	// Start the timer
 	al_start_timer(timer);
